@@ -28,10 +28,24 @@ def highest_traffic(data):
     return selected_bridges
 
 # question 2
-bridge_sums = numpy.array(dataset_2['Brooklyn Bridge']) + numpy.array(dataset_2['Manhattan Bridge']) + numpy.array(dataset_2['Williamsburg Bridge']) + numpy.array(dataset_2['Queensboro Bridge'])
-bridge_averages_q2 = bridge_sums / 4
-print("Bridge Averages:", bridge_averages_q2)
 
+def pred_bikers(data):
+    bridge_sums = numpy.array(dataset_2['Brooklyn Bridge']) + numpy.array(dataset_2['Manhattan Bridge']) + numpy.array(dataset_2['Williamsburg Bridge']) + numpy.array(dataset_2['Queensboro Bridge'])
+    bridge_averages_q2 = bridge_sums / 4
+    print("Bridge Averages:", bridge_averages_q2)
+
+    high_temp = data["High Temp"]
+    low_temp = data["Low Temp"]
+    precip = data["Precipitation"]
+
+    metrics = numpy.array([high_temp, low_temp, precip])
+    reg = LinearRegression(fit_intercept = True).fit(metrics, bridge_averages_q2)
+    reg.coef_ 
+    reg.intercept_
+    y_pred = reg.predict(X_test)
+    score = r2_score(bridge_averages_q2,y_pred)
+
+    return score
 ''' 
 The following is the starting code for path2 for data reading to make your first step easier.
 'dataset_2' is the clean data for path1.
