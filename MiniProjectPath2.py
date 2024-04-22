@@ -34,15 +34,17 @@ def pred_bikers(data):
     bridge_averages_q2 = bridge_sums / 4
     print("Bridge Averages:", bridge_averages_q2)
 
-    high_temp = data["High Temp"]
-    low_temp = data["Low Temp"]
-    precip = data["Precipitation"]
+    high_temp = data["High Temp"].values.reshape(-1, 1)
+    low_temp = data["Low Temp"].values.reshape(-1, 1)
+    precip = data["Precipitation"].values.reshape(-1, 1)
 
-    metrics = ([high_temp, low_temp, precip])
-    reg = LinearRegression(fit_intercept = True).fit(metrics, bridge_averages_q2)
-    reg.coef_ 
-    reg.intercept_
-    y_pred = reg.predict(X_test)
+    X = numpy.concatenate((high_temp, low_temp, precip), axis=1)
+    reg = LinearRegression(fit_intercept=True)
+    reg.fit(X, bridge_averages_q2)
+    print("Coefficients:", reg.coef_)
+    print("Intercept:", reg.intercept_)
+
+    y_pred = reg.predict([39.9,34,0.09])
     score = r2_score(bridge_averages_q2,y_pred)
 
     return score
