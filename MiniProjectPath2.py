@@ -26,6 +26,12 @@ def highest_traffic(data):
     sorted_bridges = sorted(bridge_totals, key=bridge_totals.get, reverse=True)
     selected_bridges = sorted_bridges[:3]
     return selected_bridges
+
+# question 2
+bridge_sums = numpy.array(dataset_2['Brooklyn Bridge']) + numpy.array(dataset_2['Manhattan Bridge']) + numpy.array(dataset_2['Williamsburg Bridge']) + numpy.array(dataset_2['Queensboro Bridge'])
+bridge_averages_q2 = bridge_sums / 4
+print("Bridge Averages:", bridge_averages_q2)
+
 ''' 
 The following is the starting code for path2 for data reading to make your first step easier.
 'dataset_2' is the clean data for path1.
