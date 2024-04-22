@@ -38,7 +38,7 @@ def pred_bikers(data):
     low_temp = data["Low Temp"]
     precip = data["Precipitation"]
 
-    metrics = numpy.array([high_temp, low_temp, precip])
+    metrics = ([high_temp, low_temp, precip])
     reg = LinearRegression(fit_intercept = True).fit(metrics, bridge_averages_q2)
     reg.coef_ 
     reg.intercept_
