@@ -1,7 +1,9 @@
-import pandas
-if __name__ == "__main__":
-    data = pandas.read_csv("nyc_bicycle_counts_2016.csv")
-    selected_bridges = highest_traffic(data)
+import pandas 
+import numpy
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
+
+
 
 
 def highest_traffic(data):
@@ -27,8 +29,6 @@ def highest_traffic(data):
     selected_bridges = sorted_bridges[:3]
     return selected_bridges
 
-# question 2
-
 def pred_bikers(data):
     bridge_sums = numpy.array(dataset_2['Brooklyn Bridge']) + numpy.array(dataset_2['Manhattan Bridge']) + numpy.array(dataset_2['Williamsburg Bridge']) + numpy.array(dataset_2['Queensboro Bridge'])
     bridge_averages_q2 = bridge_sums / 4
@@ -44,18 +44,24 @@ def pred_bikers(data):
     print("Coefficients:", reg.coef_)
     print("Intercept:", reg.intercept_)
 
-    y_pred = reg.predict([39.9,34,0.09])
+    y_pred = reg.predict([[39.9,34,0.09]])
     score = r2_score(bridge_averages_q2,y_pred)
 
     return score
+
+if __name__ == "__main__":
+    dataset_2 = pandas.read_csv('NYC_Bicycle_Counts_2016.csv')
+    dataset_2['Brooklyn Bridge']      = pandas.to_numeric(dataset_2['Brooklyn Bridge'].replace(',','', regex=True))
+    dataset_2['Manhattan Bridge']     = pandas.to_numeric(dataset_2['Manhattan Bridge'].replace(',','', regex=True))
+    dataset_2['Queensboro Bridge']    = pandas.to_numeric(dataset_2['Queensboro Bridge'].replace(',','', regex=True))
+    dataset_2['Williamsburg Bridge']  = pandas.to_numeric(dataset_2['Williamsburg Bridge'].replace(',','', regex=True))
+    dataset_2['Williamsburg Bridge']  = pandas.to_numeric(dataset_2['Williamsburg Bridge'].replace(',','', regex=True))
+    selected_bridges = highest_traffic(dataset_2)
+    score = pred_bikers(dataset_2)
+
 ''' 
 The following is the starting code for path2 for data reading to make your first step easier.
 'dataset_2' is the clean data for path1.
 '''
-dataset_2 = pandas.read_csv('NYC_Bicycle_Counts_2016.csv')
-dataset_2['Brooklyn Bridge']      = pandas.to_numeric(dataset_2['Brooklyn Bridge'].replace(',','', regex=True))
-dataset_2['Manhattan Bridge']     = pandas.to_numeric(dataset_2['Manhattan Bridge'].replace(',','', regex=True))
-dataset_2['Queensboro Bridge']    = pandas.to_numeric(dataset_2['Queensboro Bridge'].replace(',','', regex=True))
-dataset_2['Williamsburg Bridge']  = pandas.to_numeric(dataset_2['Williamsburg Bridge'].replace(',','', regex=True))
-dataset_2['Williamsburg Bridge']  = pandas.to_numeric(dataset_2['Williamsburg Bridge'].replace(',','', regex=True))
+
 # print(dataset_2.to_string()) #This line will print out your data
