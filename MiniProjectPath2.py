@@ -7,18 +7,18 @@ from sklearn.metrics import r2_score
 
 
 def highest_traffic(data):
-
+# imports the data from the csv file and stores it in variables
     brooklyn_traffic = data['Brooklyn Bridge']
     manhattan_traffic = data['Manhattan Bridge']
     williamsburg_traffic = data['Williamsburg Bridge']
     queensboro_traffic = data['Queensboro Bridge']
-
+# takes the sum of each column of data
     brooklyn_total = brooklyn_traffic.sum()
     manhattan_total = manhattan_traffic.sum()
     williamsburg_total = williamsburg_traffic.sum()
     queensboro_total = queensboro_traffic.sum()
 
-
+# returns the three bridges with the highest traffic
     bridge_totals = {
         'Brooklyn Bridge': brooklyn_total,
         'Manhattan Bridge': manhattan_total,
@@ -28,7 +28,7 @@ def highest_traffic(data):
     sorted_bridges = sorted(bridge_totals, key=bridge_totals.get, reverse=True)
     selected_bridges = sorted_bridges[:3]
     return selected_bridges
-
+# uses linear regression to find the r2 score between the data and our predicted values
 def pred_bikers(data):
     bridge_sums = numpy.array(dataset_2['Brooklyn Bridge']) + numpy.array(dataset_2['Manhattan Bridge']) + numpy.array(dataset_2['Williamsburg Bridge']) + numpy.array(dataset_2['Queensboro Bridge'])
     bridge_averages_q2 = bridge_sums / 4
