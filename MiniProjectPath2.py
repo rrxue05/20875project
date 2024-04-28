@@ -16,6 +16,15 @@ from sklearn.metrics import f1_score
 def day_predict(data):
     X = data[['Total']]
     y = data['Day']
+    average_cyclists_by_day = data.groupby('Day')['Total'].mean()
+
+    plt.figure(figsize=(10, 6))
+    plt.bar(average_cyclists_by_day.index, average_cyclists_by_day.values, color='blue')
+    plt.title('Average Total Cyclists by Day')
+    plt.xlabel('Day of the Week')
+    plt.ylabel('Average Total Cyclists')
+    plt.grid(axis='y')
+    plt.show()
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
         
@@ -39,7 +48,14 @@ def day_predict(data):
 
     print("Best F1-score:", best_f1)
     print("Best K value:", best_k)
- 
+
+    knn = KNeighborsClassifier(n_neighbors=best_k)
+    
+    knn.fit(X_train, y_train)
+    
+    y_pred = knn.predict(X_test)
+    cm = confusion_matrix(y_test, y_pred)
+    print(cm)
 
 
 
