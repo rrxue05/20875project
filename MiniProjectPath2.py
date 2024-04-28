@@ -4,8 +4,38 @@ from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import r2_score, mean_squared_error
 from sklearn.linear_model import Ridge
+import matplotlib.pyplot as plt
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix
 
 
+
+
+def day_predict(data):
+    X = data[['Total']]
+    y = data['Day']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    knn = KNeighborsClassifier(n_neighbors=52)
+
+    knn.fit(X_train, y_train)
+
+    y_pred = knn.predict(X_test)
+
+    accuracy = knn.score(X_test, y_test)
+    cm = confusion_matrix(y_test, y_pred)
+    plt.figure(figsize=(8, 6))
+    plt.scatter(y, X, color='blue')
+    plt.title('Total Cyclists vs. Day of the Week')
+    plt.xlabel('Day of the Week ')
+    plt.ylabel('Total Cyclists')
+    plt.xticks(range(7), ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
+    plt.grid(True)
+    plt.show()
+
+    print("Accuracy of KNN model:", accuracy)
+    print(cm)
 
 
 
@@ -33,12 +63,15 @@ def highest_traffic(data):
     return selected_bridges
 
 def pred_bikers(data):
-    
     scores = []
-    for _ in range(2000):
-        X = data[['High Temp', 'Low Temp', 'Precipitation']]
+    for _ in range(10):
+        data['Precipitation_High_Temp'] = data['Precipitation'] * data['High Temp']
+        data['Precipitation_Low_Temp'] = data['Precipitation'] * data['Low Temp']
+        
+        X = data[['High Temp', 'Low Temp', 'Precipitation', 'Precipitation_High_Temp', 'Precipitation_Low_Temp']]
         y = data['Total']
         X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=numpy.random.randint(1000))
+        
         model = LinearRegression()
         model.fit(X_train, y_train)
         y_pred = model.predict(X_test)
@@ -59,6 +92,7 @@ if __name__ == "__main__":
     selected_bridges = highest_traffic(dataset_2)
     avgscore = pred_bikers(dataset_2)
     print("Average R2 score: ", avgscore)
+    day_predict(dataset_2)
 
 ''' 
 The following is the starting code for path2 for data reading to make your first step easier.
