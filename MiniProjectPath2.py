@@ -7,6 +7,8 @@ from sklearn.linear_model import Ridge
 import matplotlib.pyplot as plt
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import confusion_matrix
+from sklearn.metrics import f1_score
+
 
 
 
@@ -16,26 +18,28 @@ def day_predict(data):
     y = data['Day']
 
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+        
+    k_values = range(1, 50)
 
-    knn = KNeighborsClassifier(n_neighbors=52)
+    best_f1 = 0
+    best_k = 0
 
-    knn.fit(X_train, y_train)
+    for k in k_values:
+        knn = KNeighborsClassifier(n_neighbors=k)
+    
+        knn.fit(X_train, y_train)
+    
+        y_pred = knn.predict(X_test)
+    
+        f1 = f1_score(y_test, y_pred, average='weighted')
+    
+        if f1 > best_f1:
+            best_f1 = f1
+            best_k = k
 
-    y_pred = knn.predict(X_test)
-
-    accuracy = knn.score(X_test, y_test)
-    cm = confusion_matrix(y_test, y_pred)
-    plt.figure(figsize=(8, 6))
-    plt.scatter(y, X, color='blue')
-    plt.title('Total Cyclists vs. Day of the Week')
-    plt.xlabel('Day of the Week ')
-    plt.ylabel('Total Cyclists')
-    plt.xticks(range(7), ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'])
-    plt.grid(True)
-    plt.show()
-
-    print("Accuracy of KNN model:", accuracy)
-    print(cm)
+    print("Best F1-score:", best_f1)
+    print("Best K value:", best_k)
+ 
 
 
 
@@ -93,8 +97,3 @@ if __name__ == "__main__":
     avgscore = pred_bikers(dataset_2)
     print("Average R2 score: ", avgscore)
     day_predict(dataset_2)
-
-''' 
-The following is the starting code for path2 for data reading to make your first step easier.
-'dataset_2' is the clean data for path1.
-'''
